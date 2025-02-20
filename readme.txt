@@ -22,5 +22,5 @@
     git merge sainath
     git push origin main
 
-4. how do I know which branch I am in?
+5. how do I know which branch I am in?
     git branch
