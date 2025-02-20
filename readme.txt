@@ -6,7 +6,7 @@
     git push origin sainath             --> push the code to the remote sainath branch
 
 2. how to push code to the main branch?
-    git checkout main --> switch to main branch
+    git checkout main
     git add .
     git commit -m "Your commit message"
     git push origin main
@@ -14,6 +14,13 @@
 3. how to pull code from main branch to sainath branch?
     git checkout sainath
     git pull origin main
+
+4. how to push code from sainath branch to main branch?
+    git checkout sainath
+    git pull origin main
+    git checkout main
+    git merge sainath
+    git push origin main
 
 4. how do I know which branch I am in?
     git branch
