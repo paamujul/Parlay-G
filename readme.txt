@@ -1,8 +1,9 @@
 1. how to push code just to sainath branch?
-    git checkout sainath --> switch to sainath branch
-    git add .
-    git commit -m "Your commit message"
-    git push origin sainath
+    git checkout sainath                --> switch to sainath branch
+    git add .                           --> add all the files to the staging area
+    git commit -m "Your commit message" --> commit the changes
+    git pull origin sainath --rebase    --> pull the code from the remote sainath branch
+    git push origin sainath             --> push the code to the remote sainath branch
 
 2. how to push code to the main branch?
     git checkout main --> switch to main branch
