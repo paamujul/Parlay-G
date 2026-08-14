@@ -1,0 +1,47 @@
+# Runtime configuration for the NCAA basketball prediction app.
+# Read by NCAA/app/config.py at import time. Any key omitted here
+# falls back to the default defined in NCAA/app/config.py's DEFAULTS
+# dict, so the app runs fine even if this file is empty, missing, or
+# only partially filled in.
+#
+# NOT covered by this file (stays hardcoded/elsewhere on purpose):
+#   - DB credentials -> .env / backend.py (python-dotenv)
+#   - SQL query text & column-name lists -> backend.py
+#   - Model hyperparameters -> ml.py
+#
+# NOTE: this file is only read at process start. After editing it,
+# fully restart `streamlit run`, not just refresh the browser tab.
+
+# Train/test split cutoff date ("YYYY-MM-DD"). Rows with date_team
+# >= this date go to the test set, earlier rows go to train.
+split_date: "2025-02-28"
+
+# Number of prior games used for each team's rolling-average features.
+rolling_window_size: 3
+
+# Elo rating parameters used by backend.py's Elo calculation.
+elo:
+  initial_rating: 1500
+  k_factor: 20
+  home_advantage: 100
+
+# Model display names, keyed by stable identifier. app.py uses these
+# keys for BOTH building the sidebar dropdown and dispatching the
+# "Train & Evaluate" button to the right function -- do not rename or
+# remove the keys (random_forest, logistic_regression, lightgbm,
+# xgboost, neural_network); only edit the display-name values.
+models:
+  random_forest: "Random Forest"
+  logistic_regression: "Logistic Regression"
+  lightgbm: "LightGBM"
+  xgboost: "XGBoost"
+  neural_network: "Neural Network (Keras)"
+
+# Parlay-builder "Number of Parlay Legs" input defaults. Keep these as
+# whole numbers (no decimals) -- Streamlit's number_input requires
+# min/max/default/step to all share the same type (int vs float).
+parlay:
+  min_legs: 2
+  max_legs: 15
+  default_legs: 3
+  step: 1

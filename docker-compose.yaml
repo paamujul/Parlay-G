@@ -1,0 +1,38 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: ${DB_NAME:-ncaa_basketball}
+      POSTGRES_USER: ${DB_USER:-ncaa}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD must be set in .env}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./NCAA/db/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./NCAA/db/docker-seed.sh:/docker-entrypoint-initdb.d/02-seed.sh:ro
+      - ./NCAA/db/load_data.sh:/opt/ncaa/load_data.sh:ro
+      - ./NCAA/data:/opt/ncaa/data:ro
+    ports:
+      - "5434:5432"   # 5433 on the host: Homebrew Postgres owns 5432
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U ${DB_USER:-ncaa} -d ${DB_NAME:-ncaa_basketball}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 180s
+
+  web:
+    build: .
+    ports:
+      - "8501:8501"
+    environment:
+      DB_HOST: db          # service name, NOT localhost
+      DB_PORT: 5432        # internal port, not the 5433 host mapping
+      DB_NAME: ${DB_NAME:-ncaa_basketball}
+      DB_USER: ${DB_USER:-ncaa}
+      DB_PASSWORD: ${DB_PASSWORD}
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:
